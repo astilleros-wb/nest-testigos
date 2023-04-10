@@ -12,7 +12,7 @@ import { WitnessVersionModule } from './witness-version/witness-version.module';
 import { WitnessAlertModule } from './witness-alert/witness-alert.module';
 import { WitnessListModule } from './witness-list/witness-list.module';
 import { PropertyModule } from './property/property.module';
-import { LocationParserModule } from './_providers/fotocasa/location-parser/location-parser.module';
+import { FotocasaLocationParserModule } from './_providers/fotocasa/fotocasa-location-parser/fotocasa-location-parser.module';
 import { FotocasaUrlParserModule } from './_providers/fotocasa/fotocasa-url-parser/fotocasa-url-parser.module';
 
 @Module({
@@ -31,7 +31,7 @@ import { FotocasaUrlParserModule } from './_providers/fotocasa/fotocasa-url-pars
     WitnessAlertModule,
     WitnessListModule,
     PropertyModule,
-    LocationParserModule,
+    FotocasaLocationParserModule,
     FotocasaUrlParserModule,
   ],
 })

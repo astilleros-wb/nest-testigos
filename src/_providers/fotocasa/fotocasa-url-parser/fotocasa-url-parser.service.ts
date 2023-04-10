@@ -10,15 +10,15 @@ import {
   typeToCode,
   UrlTypeFotocasa,
 } from '../enums';
-import { MapRecord } from '../location-parser/entities/map-record.entity';
-import { LocationParserService } from '../location-parser/location-parser.service';
+import { FotocasaLocation } from '../fotocasa-location-parser/entities/fotocasa-location';
+import { FotocasaLocationService } from '../fotocasa-location-parser/fotocasa-location-parser.service';
 import turf from '@turf/turf';
 import { Provider } from '../../../common/enums';
 import { UrlParser } from 'src/metadatum/url-parser/url-parser-factory.interface';
 
 @Injectable()
 export class FotocasaUrlParserService implements UrlParser{
-  constructor(private readonly locationParserService: LocationParserService) {}
+  constructor(private readonly locationParserService: FotocasaLocationService) {}
 
   async parse(url: URL): Promise<Object> {
     const md: any = {};
@@ -166,7 +166,7 @@ export class FotocasaUrlParserService implements UrlParser{
 
       const district_slug =
         locations.decoded.length == 2 ? locations.decoded[1] : undefined;
-      let district: MapRecord[] | undefined;
+      let district: FotocasaLocation[] | undefined;
       if (district_slug) {
         district = await this.locationParserService.findByName(
           district_slug,
