@@ -1,9 +1,9 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { FotocasaLocationParserModule } from '../fotocasa-location-parser/fotocasa-location-parser.module';
 import { FotocasaUrlParserService } from './fotocasa-url-parser.service';
 
 @Module({
-  imports: [FotocasaLocationParserModule],
+  imports: [FotocasaLocationParserModule, FotocasaLocationParserModule],
   providers: [FotocasaUrlParserService],
   exports: [FotocasaUrlParserService],
 })

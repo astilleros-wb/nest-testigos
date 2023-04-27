@@ -1,26 +1,24 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateWitnessAlertDto } from './dto/create-witness-alert.dto';
-import { UpdateWitnessAlertDto } from './dto/update-witness-alert.dto';
+import { WitnessAlert } from './entities/witness-alert.entity';
 
 @Injectable()
 export class WitnessAlertService {
-  create(createWitnessAlertDto: CreateWitnessAlertDto) {
-    return 'This action adds a new witnessAlert';
+  constructor(
+    @InjectModel(WitnessAlert.name)
+    private readonly witnessAlertModel: Model<WitnessAlert>,
+  ) {}
+  async create(createWitnessAlertDto: CreateWitnessAlertDto) {
+    return await this.witnessAlertModel.create(createWitnessAlertDto);
+  }
+
+  async createMany(createWitnessAlertDtos: CreateWitnessAlertDto[]) {
+    return await this.witnessAlertModel.insertMany(createWitnessAlertDtos);
   }
 
   findAll() {
     return `This action returns all witnessAlert`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} witnessAlert`;
-  }
-
-  update(id: number, updateWitnessAlertDto: UpdateWitnessAlertDto) {
-    return `This action updates a #${id} witnessAlert`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} witnessAlert`;
   }
 }

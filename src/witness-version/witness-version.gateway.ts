@@ -1,4 +1,8 @@
-import { WebSocketGateway, SubscribeMessage, MessageBody } from '@nestjs/websockets';
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+  MessageBody,
+} from '@nestjs/websockets';
 import { WitnessVersionService } from './witness-version.service';
 import { CreateWitnessVersionDto } from './dto/create-witness-version.dto';
 import { UpdateWitnessVersionDto } from './dto/update-witness-version.dto';
@@ -16,5 +20,4 @@ export class WitnessVersionGateway {
   findOne(@MessageBody() id: number) {
     return this.witnessVersionService.findOne(id);
   }
-
 }

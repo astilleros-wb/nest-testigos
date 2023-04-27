@@ -5,10 +5,8 @@ import { EnvConfiguration } from './config/app.config';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { CommonModule } from './common/common.module';
-import { MetadataModule } from './metadatum/metadata.module';
+import { MetadatumModule } from './metadatum/metadatum.module';
 import { AddModule } from './add/add.module';
-import { AddVersionModule } from './add-version/add-version.module';
-import { AddAlertModule } from './add-alert/add-alert.module';
 import { WitnessModule } from './witness/witness.module';
 import { WitnessVersionModule } from './witness-version/witness-version.module';
 import { WitnessAlertModule } from './witness-alert/witness-alert.module';
@@ -18,15 +16,22 @@ import { FotocasaLocationParserModule } from './_providers/fotocasa/fotocasa-loc
 import { FotocasaUrlParserModule } from './_providers/fotocasa/fotocasa-url-parser/fotocasa-url-parser.module';
 
 import { join } from 'path';
+import { FotocasaUrlGeneratorService } from './_providers/fotocasa/fotocasa-url-generator/fotocasa-url-generator.service';
+import { FotocasaUrlScrapperModule } from './_providers/fotocasa/fotocasa-url-scrapper/fotocasa-url-scrapper.module';
+import { BullModule } from '@nestjs/bullmq';
+import { AddScrappedWorker } from './add/add-scrapped.worker';
+import { UrlParserModule } from './url-parser/url-parser.module';
+import { UrlGeneratorModule } from './url-generator/url-generator.module';
+import { UrlScrapperModule } from './url-scrapper/url-scrapper.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [EnvConfiguration],
-      isGlobal: true
+      isGlobal: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public')
+      rootPath: join(__dirname, '..', 'src/public'),
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -36,10 +41,8 @@ import { join } from 'path';
       inject: [ConfigService],
     }),
     CommonModule,
-    MetadataModule,
+    MetadatumModule,
     AddModule,
-    AddVersionModule,
-    AddAlertModule,
     WitnessModule,
     WitnessVersionModule,
     WitnessAlertModule,
@@ -47,6 +50,18 @@ import { join } from 'path';
     PropertyModule,
     FotocasaLocationParserModule,
     FotocasaUrlParserModule,
+    FotocasaUrlScrapperModule,
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+    UrlParserModule,
+    UrlGeneratorModule,
+    UrlScrapperModule,
   ],
+  providers: [FotocasaUrlGeneratorService, AddScrappedWorker],
+  exports: [BullModule],
 })
 export class AppModule {}

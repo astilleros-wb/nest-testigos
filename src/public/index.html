@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- TODO -->
+    <script src="./map.js" type="module"></script>
+    <script src="./forms.js" type="module"></script>
+    <script type="module">
+      import {initMap} from './map.js'
+      window.initMap = initMap;
+    </script>
+    
+    <title>Alpha V0</title>
+  </head>
+  <body>
+      URL DE PORTAL <input type="text" id="detailUrl" />
+      <select name="url_select" id="url_select">
+        <option value="https://www.fotocasa.es/es/comprar/vivienda/chiva/aire-acondicionado-calefaccion-jardin-terraza-no-amueblado/161243201/d">detail_url</option>
+        <option value="https://www.fotocasa.es/es/comprar/viviendas/chiva/todas-las-zonas/l?combinedLocationIds=724%2C19%2C46%2C350%2C659%2C46111%2C0%2C2552%2C0%3B724%2C19%2C46%2C350%2C659%2C46111%2C0%2C2553%2C0&featureIds=7%3B3">chiva 1</option>
+        <option value="https://www.fotocasa.es/es/comprar/viviendas/chiva/todas-las-zonas/l?combinedLocationIds=724%2C19%2C46%2C350%2C659%2C46111%2C0%2C2552%2C0%3B724%2C19%2C46%2C350%2C659%2C46111%2C0%2C2553%2C0&conservationStatusIds=1%3B3%3B4%3B2&featureIds=7%3B3%3B13%3B5%3B10%3B32%3B17%3B19%3B11%3B130%3B21%3B1&maxPrice=175000&maxSurface=280&minBathrooms=2&minPrice=75000&minRooms=3&minSurface=80&propertySubtypeIds=1%3B2%3B6%3B7%3B8%3B52%3B54%3B3%3B9%3B5">Chiva 2</option>
+        <option value="https://www.fotocasa.es/es/comprar/viviendas/cheste/todas-las-zonas/l">Cheste 1 todas</option>
+        <option value="https://www.fotocasa.es/es/comprar/viviendas/madrid-capital/todas-las-zonas/l">Madrid 1 todas</option>
+        <option value="https://www.fotocasa.es/es/comprar/viviendas/madrid-capital/castellana/l">Madrid castellana</option>
+        <option value="https://www.fotocasa.es/es/comprar/viviendas/padul/todas-las-zonas/l">Padul</option>
+        <option value="https://www.fotocasa.es/es/comprar/pisos/manresa/todas-las-zonas/l?combinedLocationIds=724%2C9%2C8%2C235%2C406%2C8113%2C0%2C1212%2C0%3B724%2C9%2C8%2C235%2C406%2C8113%2C0%2C1204%2C0%3B724%2C9%2C8%2C235%2C406%2C8113%2C0%2C1210%2C0%3B724%2C9%2C8%2C235%2C406%2C8113%2C0%2C3340%2C0%3B724%2C9%2C8%2C235%2C406%2C8113%2C0%2C3339%2C0%3B724%2C9%2C8%2C235%2C406%2C8113%2C0%2C1211%2C0%3B724%2C9%2C8%2C235%2C406%2C8113%2C0%2C1209%2C0%3B724%2C9%2C8%2C235%2C406%2C8113%2C0%2C1208%2C0%3B724%2C9%2C8%2C235%2C406%2C8113%2C0%2C1318%2C0%3B724%2C9%2C8%2C235%2C406%2C8113%2C0%2C1206%2C0%3B724%2C9%2C8%2C235%2C406%2C8113%2C0%2C1205%2C0%3B724%2C9%2C8%2C235%2C406%2C8113%2C0%2C1203%2C0&maxPrice=125000&maxSurface=120&minBathrooms=2&minPrice=50000&minRooms=2&minSurface=60">Manresa todo</option>
+      </select>
+      <button id="btn_generate_metadata">GENERAR METADATA</button>
+    </form>
+    <hr>
+      <select name="providers" id="providers" multiple style="visibility: hidden; display: none;">
+        <option value="0">Fotocasa</option>
+      </select>
+
+      <select name="transaction" id="transaction" style="visibility: hidden; display: none;">
+        <option value="0">Compraventa</option>
+        <option value="1">Alquiler</option>
+        <option value="2">Promoción</option>
+        <option value="3">Alquiler con opción de compra</option>
+        <option value="4">Compartir</option>
+      </select>
+
+      <select name="typologies" id="typologies" multiple>
+        <option value="0">terreno</option>
+        <option value="1">solar</option>
+        <option value="2">edificio</option>
+        <option value="3">casa</option>
+        <option value="4">piso</option>
+        <option value="5">oficinas</option>
+        <option value="6">trastero</option>
+        <option value="7">garaje</option>
+      </select>
+
+      <select name="conservations" id="conservations" multiple>
+        <option value="0">obra_nueva</option>
+        <option value="1">muy_bien</option>
+        <option value="2">bien</option>
+        <option value="3">reformado</option>
+        <option value="4">a_reformar</option>
+      </select>
+
+      <select name="extraFeatures" id="extraFeatures" multiple>
+        <option value="0">aire_acondicionado</option>
+        <option value="1">calefaccion</option>
+        <option value="2">parking</option>
+        <option value="3">jardin</option>
+        <option value="4">terraza</option>
+        <option value="5">trastero</option>
+        <option value="6">ascensor</option>
+        <option value="7">piscina</option>
+        <option value="8">amueblado</option>
+        <option value="9">electrodomesticos</option>
+        <option value="10">balcon</option>
+        <option value="11">no_amueblado</option>
+      </select>
+      <div>
+        Surface:
+        <input type="text" id="surfaceMin" />
+        <input type="text" id="surfaceValue" />
+        <input type="text" id="surfaceMax" />
+      </div>
+      <div>
+        Bedrooms:
+        <input type="text" id="bedroomsMin" />
+        <input type="text" id="bedroomsValue" />
+        <input type="text" id="bedroomsMax" />
+      </div>
+      <div>
+        Bathrooms:
+        <input type="text" id="bathroomsMin" />
+        <input type="text" id="bathroomsValue" />
+        <input type="text" id="bathroomsMax" />
+      </div>
+      <div>
+        Rooms:
+        <input type="text" id="roomsMin" />
+        <input type="text" id="roomsValue" />
+        <input type="text" id="roomsMax" />
+      </div>
+      <div>
+        Price:
+        <input type="text" id="priceMin" />
+        <input type="text" id="priceValue" />
+        <input type="text" id="priceMax" />
+      </div>
+      <button id="btn_generate_list">GENERAR LISTADO</button>
+
+    <hr>
+
+    <div id="map" style="height: 500px"></div>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzE8_-Rw1bVRlJTLLsYlUQpaF73o-Gt9E&callback=initMap&v=weekly&libraries=drawing"
+      defer
+    ></script>
+  </body>
+</html>

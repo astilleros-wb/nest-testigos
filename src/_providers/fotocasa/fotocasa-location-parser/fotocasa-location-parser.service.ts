@@ -15,7 +15,6 @@ export class FotocasaLocationService {
     @InjectModel(FotocasaLocation.name)
     private readonly fotocasaLocation: Model<FotocasaLocation>,
   ) {}
-  
 
   intersections(
     feature: turf.Point | turf.Polygon | turf.MultiPolygon,
@@ -120,23 +119,32 @@ export class FotocasaLocationService {
   async checkSeed() {
     const count = await this.fotocasaLocation.count();
     if (count > 0) return;
-    const buffer = await fs.readFile(join(process.cwd(), '/seed/fotocasa.json') );
-    const json = JSON.parse(buffer.toString())
-    const bson = json.map((doc:any) => {
-      if(doc.geo.type === 'GeometryCollection' && doc.geo.geometries?.length === 1) {
-        doc.geo = doc.geo.geometries[0]
+    const buffer = await fs.readFile(
+      join(process.cwd(), '/seed/fotocasa.json'),
+    );
+    const json = JSON.parse(buffer.toString());
+    const bson = json.map((doc: any) => {
+      if (
+        doc.geo.type === 'GeometryCollection' &&
+        doc.geo.geometries?.length === 1
+      ) {
+        doc.geo = doc.geo.geometries[0];
       }
-      if(doc.geo.type === 'GeometryCollection'){
-        return undefined
+      if (doc.geo.type === 'GeometryCollection') {
+        return undefined;
       }
-      const data : any = {
+      const data: any = {
         ...doc,
-        _id: new ObjectId(doc['$oid'])
-      }
-      return data
-    })
-    const cleaned = bson.filter((d) => !!d)
+        _id: new ObjectId(doc['$oid']),
+      };
+      return data;
+    });
+    const cleaned = bson.filter((d) => !!d);
     const insert = await this.fotocasaLocation.collection.insertMany(cleaned);
-    console.log('#SEED# Fotocasa locations: ', insert.acknowledged, insert.insertedCount);
+    console.log(
+      '#SEED# Fotocasa locations: ',
+      insert.acknowledged,
+      insert.insertedCount,
+    );
   }
 }

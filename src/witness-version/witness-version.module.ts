@@ -14,5 +14,6 @@ import {
     ]),
   ],
   providers: [WitnessVersionGateway, WitnessVersionService],
+  exports: [WitnessVersionService],
 })
 export class WitnessVersionModule {}

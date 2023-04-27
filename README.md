@@ -17,7 +17,17 @@
   npm i -g @nestjs/cli
   ```
 
-  4. Up Database
+  4. Up MongoDB & Redis
   ```
   docker-compose up -d
+  ```
+
+  5. Exec dev
+  ```
+  npm run start:dev
+  ```
+
+  6. Navigater to
+  ```
+  http://localhost:3000
   ```

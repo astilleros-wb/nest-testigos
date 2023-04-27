@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { ObjectId } from 'mongoose';
-import { NotificationType } from '../../common/enums';
+import { AlertType } from '../../common/enums';
 
 @Schema({ timestamps: true, versionKey: false })
 export class WitnessAlert {
@@ -10,8 +10,8 @@ export class WitnessAlert {
   @Prop()
   version: number;
 
-  @Prop({ type: Number, enum: NotificationType })
-  type: NotificationType;
+  @Prop({ type: Number, enum: AlertType })
+  type: AlertType;
 
   @Prop()
   old?: number;

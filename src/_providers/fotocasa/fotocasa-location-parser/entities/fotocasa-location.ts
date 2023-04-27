@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { MultiPolygon, Polygon } from '@turf/turf';
-import {Document} from 'mongoose'
+import { Document } from 'mongoose';
 
 @Schema({ timestamps: false, versionKey: false })
 export class FotocasaLocation extends Document {
@@ -13,7 +13,7 @@ export class FotocasaLocation extends Document {
   @Prop()
   readonly level: number;
 
-  @Prop({type: {}})
+  @Prop({ type: {} })
   readonly geo: Polygon | MultiPolygon;
 
   @Prop()
@@ -25,8 +25,8 @@ export class FotocasaLocation extends Document {
   @Prop()
   readonly encoded: string;
 }
- 
 
-export const FotocasaLocationSchema = SchemaFactory.createForClass(FotocasaLocation);
+export const FotocasaLocationSchema =
+  SchemaFactory.createForClass(FotocasaLocation);
 
-FotocasaLocationSchema.index({ "geo": "2dsphere" });
+FotocasaLocationSchema.index({ geo: '2dsphere' });

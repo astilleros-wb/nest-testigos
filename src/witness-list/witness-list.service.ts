@@ -1,26 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { CreateWitnessListDto } from './dto/create-witness-list.dto';
-import { UpdateWitnessListDto } from './dto/update-witness-list.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { MetadatumDto } from 'src/metadatum/dto/metadatum.dto';
+import { UrlGeneratorFactory } from 'src/url-generator/url-generator-factory.factory';
+import { UrlScrapperFactory } from 'src/url-scrapper/url-scrapper.factory';
+import { WitnessService } from 'src/witness/witness.service';
+import { WitnessList } from './entities/witness-list.entity';
 
 @Injectable()
 export class WitnessListService {
-  create(createWitnessListDto: CreateWitnessListDto) {
-    return 'This action adds a new witnessList';
-  }
+  constructor(
+    @InjectModel(WitnessList.name)
+    private readonly witnessListModel: Model<WitnessList>,
+    private readonly witnessService: WitnessService,
+    private readonly urlGeneratorFactory: UrlGeneratorFactory,
+    private readonly urlScrapperFactory: UrlScrapperFactory,
+  ) {}
 
-  findAll() {
-    return `This action returns all witnessList`;
-  }
+  async generateListFromMetadatum(
+    metadatum: MetadatumDto,
+  ): Promise<WitnessList> {
+    console.log(metadatum);
 
-  findOne(id: number) {
-    return `This action returns a #${id} witnessList`;
-  }
+    const urls = await this.urlGeneratorFactory.generateUrls(metadatum);
+    console.log(urls);
+    const adds = urls.map((url: string) => this.urlScrapperFactory.scrapp(url));
 
-  update(id: number, updateWitnessListDto: UpdateWitnessListDto) {
-    return `This action updates a #${id} witnessList`;
-  }
+    const now = new Date();
+    const witnesses = await this.witnessService.findByMetadata(metadatum);
+    console.log(witnesses);
 
-  remove(id: number) {
-    return `This action removes a #${id} witnessList`;
+    const list = await this.witnessListModel.create({
+      name: 'Prueba',
+      outdated: false,
+      keepTrack: true,
+      createdAt: now,
+      updatedAt: now,
+      metadatum,
+      witnesses,
+    });
+
+    return list;
   }
 }

@@ -4,6 +4,6 @@ import { CommonGateway } from './common.gateway';
 import { Geo } from './geo/geo';
 
 @Module({
-  providers: [CommonGateway, CommonService, Geo]
+  providers: [CommonGateway, CommonService, Geo],
 })
 export class CommonModule {}

@@ -13,7 +13,7 @@ export class Property {
   @Prop({ type: Number, enum: Conservation })
   conservation: Conservation;
 
-  @Prop({ type: [{ type: Number, enum: [Conservation] }], default: [] })
+  @Prop({ type: [{ type: Number, enum: [ExtraFeature] }], default: [] })
   extraFeatures: ExtraFeature[];
 
   @Prop()
@@ -34,8 +34,8 @@ export class Property {
   @Prop()
   price: number;
 
-  @Prop({ default: [] })
-  geo: (Point | Polygon | MultiPolygon)[];
+  @Prop({ type: Object, _id: false })
+  geo: Point | Polygon | MultiPolygon;
 }
 
 export const PropertySchema = SchemaFactory.createForClass(Property);

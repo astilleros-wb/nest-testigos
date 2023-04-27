@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ObjectId } from 'mongodb';
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import {
   WitnessAlert,
   WitnessAlertSchema,
@@ -11,7 +11,7 @@ import {
 } from '../../property/entities/property.entity';
 
 @Schema({ timestamps: true, versionKey: false })
-export class Witness {
+export class Witness extends Document {
   @Prop()
   version: number;
 
@@ -26,3 +26,5 @@ export class Witness {
 }
 
 export const WitnessSchema = SchemaFactory.createForClass(Witness);
+
+WitnessSchema.index({ 'property.geo': '2dsphere' });

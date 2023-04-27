@@ -12,16 +12,19 @@ import {
 } from '../enums';
 import { FotocasaLocation } from '../fotocasa-location-parser/entities/fotocasa-location';
 import { FotocasaLocationService } from '../fotocasa-location-parser/fotocasa-location-parser.service';
-import turf from '@turf/turf';
+import * as turf from '@turf/turf';
 import { Provider } from '../../../common/enums';
-import { UrlParser } from 'src/metadatum/url-parser/url-parser-factory.interface';
+import { UrlParser } from '../../../url-parser/url-parser-factory.interface';
 
 @Injectable()
-export class FotocasaUrlParserService implements UrlParser{
-  constructor(private readonly locationParserService: FotocasaLocationService) {}
+export class FotocasaUrlParserService implements UrlParser {
+  constructor(
+    private readonly locationParserService: FotocasaLocationService,
+  ) {}
 
-  async parse(url: URL): Promise<Object> {
+  async parse(url: URL): Promise<object> {
     const md: any = {};
+    console.log(url.hostname);
 
     md.providers = [Provider.fotocasa];
 
@@ -44,7 +47,8 @@ export class FotocasaUrlParserService implements UrlParser{
     if (!md.languages.length) throw 'language not recognized.';
 
     md.transaction = transactionToCode[transaction];
-    if (!md.transaction) throw 'transaction not recognized.';
+    console.log(md.transaction);
+    if (md.transaction === undefined) throw 'transaction not recognized.';
 
     md.typologies = FotoToMetaTypology(propertyType);
     if (!md.typologies?.length) throw 'Typologies not recognized.';
@@ -124,10 +128,7 @@ export class FotocasaUrlParserService implements UrlParser{
           if (!(i + 1 < extraFeatures.length)) break;
           const key = extraFeatures[i] + '-' + extraFeatures[i + 1];
           if (ExtraFeaturetrToCode[key] || ExtraFeaturetrToCode[key] === 0) {
-            md.extraFeatures = [
-              ...md.extraFeatures,
-              ExtraFeaturetrToCode[key],
-            ];
+            md.extraFeatures = [...md.extraFeatures, ExtraFeaturetrToCode[key]];
             i++;
           }
         }
