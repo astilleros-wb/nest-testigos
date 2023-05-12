@@ -20,17 +20,29 @@ export class FotocasaUrlScrapperService implements UrlScrapper {
   async scrapp(url: string) {
     // TODO: CACHEAR URL
     // TODO: SACAR ESTA FAENA A TONI
-    const response = await fetch(url);
-    const data = await response.json();
 
-    const fotocasaAdds: fotocasaAdd[] = data.realEstates;
-    console.log('TOTAL ANUNCIOS fotocasaAdds: ', fotocasaAdds.length);
-    const Raws: fotocasaAdd[] = plainToInstance(fotocasaAdd, fotocasaAdds);
-    console.log('TOTAL ANUNCIOS plainToInstance: ', Raws.length);
-    const Adds = Raws.map((R) => this.toAdd(R)).filter((a: any) => !!a);
-    Adds.forEach((add) =>
-      this.addService.add(add.provider + add.provider_id, add),
-    );
+    let progress = 0;
+    let pageNumber = 1;
+    let pageCount = 0;
+    const url_paginated = new URL(url);
+
+    do {
+      url_paginated.searchParams.set('pageNumber', String(pageNumber));
+      const response = await fetch(url_paginated.href);
+      const data = await response.json();
+      console.log(url, data.count, data.realEstates.length);
+      pageCount = data.count;
+      progress += data.realEstates.length;
+      const fotocasaAdds: fotocasaAdd[] = data.realEstates;
+      console.log('TOTAL ANUNCIOS fotocasaAdds: ', fotocasaAdds.length);
+      const Raws: fotocasaAdd[] = plainToInstance(fotocasaAdd, fotocasaAdds);
+      console.log('TOTAL ANUNCIOS plainToInstance: ', Raws.length);
+      const Adds = Raws.map((R) => this.toAdd(R)).filter((a: any) => !!a);
+      Adds.forEach((add) =>
+        this.addService.add(add.provider + add.provider_id, add),
+      );
+      pageNumber++;
+    } while (progress < pageCount);
   }
 
   toAdd(raw: fotocasaAdd): CreateAddDto {
@@ -39,7 +51,7 @@ export class FotocasaUrlScrapperService implements UrlScrapper {
       return p;
     }, {});
     const typologies = FotoToMetaTypology([raw.typeId, [raw.subtypeId]]);
-    console.log(typologies);
+    //console.log(typologies);
 
     if (!typologies?.length) return;
     return {

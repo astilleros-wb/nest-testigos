@@ -110,7 +110,7 @@ export class WitnessService {
     console.log('upsertWitnessFromNewAdd');
 
     const witness = await this.duplicatedByProperty(add.property);
-    console.log(witness);
+    //console.log(witness);
 
     if (witness) {
       await this.mergeAdd(witness, add);

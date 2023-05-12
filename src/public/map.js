@@ -55,7 +55,7 @@ export const setGeo = function (geo) {
     const paths = geo.coordinates[0].map((c) => ({ lat: c[1], lng: c[0] }));
     const polygon = new google.maps.Polygon({
       paths: [paths],
-      editable: false,
+      editable: true,
       draggable: false,
     });
 
@@ -83,6 +83,20 @@ export const setGeo = function (geo) {
 
     map.fitBounds(bounds);
   }
+};
+
+export const getGeo = function () {
+  const coordinates = features.map((F) => {
+    let c = F.getPath().g.map((C) => [C.lng, C.lat]);
+    c = c.concat(c[0]);
+    return c;
+  });
+  const res = {
+    type: 'MultiPolygon',
+    coordinates,
+  };
+  console.log(res);
+  return res;
 };
 
 export const setList = function (L) {

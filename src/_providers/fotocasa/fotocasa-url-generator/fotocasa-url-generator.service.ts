@@ -61,13 +61,15 @@ export class FotocasaUrlGeneratorService {
 
     const propertyTypes = MetaToFotoTypologys(md.typologies, 'api');
     if (!propertyTypes.length) return [];
-    console.log('generator propertyTypes', propertyTypes);
+    //console.log('generator propertyTypes', propertyTypes);
 
     url.searchParams.set('propertyTypeId', propertyTypes[0][0]);
     if (propertyTypes.length > 1)
       url.searchParams.set('propertySubtypeIds', propertyTypes[0][1].join(';'));
 
     if (!md.geo) throw new Error('Geometry required.');
+    console.log(md.geo);
+    
     const centerOfMass = turf.centerOfMass(md.geo);
     url.searchParams.set(
       'latitude',

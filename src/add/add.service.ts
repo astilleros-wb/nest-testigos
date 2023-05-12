@@ -20,18 +20,18 @@ export class AddService {
 
   /* Se llama por cada anuncio que viene del scrapper */
   async upsertFromScrapper(add: CreateAddDto): Promise<Add> {
-    console.log('AddService@upsertFromScrapper');
+    //console.log('AddService@upsertFromScrapper');
     const exist = await this.addModel.findOne({
       provider: add.provider,
       provider_id: add.provider_id,
     });
-    console.log('exist ', exist?._id);
+    //console.log('exist ', exist?._id);
     if (!exist) return await this.newAdd(add);
     return await this.updateAdd(exist, add);
   }
 
   async newAdd(createAddDto: CreateAddDto): Promise<Add> {
-    console.log('AddService@newAdd', createAddDto);
+    //console.log('AddService@newAdd', createAddDto);
 
     const add = await this.addModel.create(createAddDto);
 

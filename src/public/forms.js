@@ -1,5 +1,5 @@
 import sockets from './socket.js';
-import { setGeo, clearGeos, setList } from './map.js';
+import { getGeo, setGeo, clearGeos, setList } from './map.js';
 
 let geo; // TO DELETE GEO GENERADO
 
@@ -66,7 +66,7 @@ const sendProviderUrl = (e) => {
 const sendMetadata = (e) => {
   const metadata = generateMetadata();
   sockets.master.emit('generateListFromMetadatum', metadata, (data) => {
-    console.log(data);
+    //console.log(data);
     addList(data);
   });
 };
@@ -165,6 +165,8 @@ const setMetadata = (m) => {
 };
 
 const generateMetadata = () => {
+  console.log(geo);
+  //geo = getGeo();
   return {
     providers: Array.from(V.providers.options)
       .filter((o) => o.selected)

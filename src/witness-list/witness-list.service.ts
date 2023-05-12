@@ -24,11 +24,12 @@ export class WitnessListService {
 
     const urls = await this.urlGeneratorFactory.generateUrls(metadatum);
     console.log(urls);
-    const adds = urls.map((url: string) => this.urlScrapperFactory.scrapp(url));
+    const new_adds = urls.map((url: string) =>
+      this.urlScrapperFactory.scrapp(url),
+    );
 
     const now = new Date();
     const witnesses = await this.witnessService.findByMetadata(metadatum);
-    console.log(witnesses);
 
     const list = await this.witnessListModel.create({
       name: 'Prueba',
@@ -37,7 +38,7 @@ export class WitnessListService {
       createdAt: now,
       updatedAt: now,
       metadatum,
-      witnesses,
+      items: witnesses,
     });
 
     return list;

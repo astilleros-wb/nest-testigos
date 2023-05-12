@@ -10,7 +10,7 @@ export class AddScrappedWorker extends WorkerHost {
   }
 
   async process(job: Job<CreateAddDto, any, string>): Promise<any> {
-    console.log('AddScrappedQueue@process', job.data.url);
+    //console.log('AddScrappedQueue@process', job.data.url);
 
     // SCRAP URL
     const add = await this.addService.upsertFromScrapper(job.data);
