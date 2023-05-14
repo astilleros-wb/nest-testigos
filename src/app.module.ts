@@ -24,6 +24,8 @@ import { UrlParserModule } from './url-parser/url-parser.module';
 import { UrlGeneratorModule } from './url-generator/url-generator.module';
 import { UrlScrapperModule } from './url-scrapper/url-scrapper.module';
 import { ImageCheckerModule } from './image-checker/image-checker.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-ioredis';
 
 @Module({
   imports: [
@@ -62,6 +64,12 @@ import { ImageCheckerModule } from './image-checker/image-checker.module';
     UrlGeneratorModule,
     UrlScrapperModule,
     ImageCheckerModule,
+    CacheModule.register({
+      isGlobal: true,
+      store: redisStore,
+      host: 'localhost',
+      port: 6379,
+    }),
   ],
   providers: [FotocasaUrlGeneratorService, AddScrappedWorker],
   exports: [BullModule],

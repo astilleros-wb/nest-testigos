@@ -126,5 +126,6 @@ export const setList = function (L) {
     marker.addListener('click', function () {
       info.open(map, marker);
     });
+    markers.push(marker);
   });
 };

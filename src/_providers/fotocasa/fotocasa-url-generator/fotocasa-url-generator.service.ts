@@ -64,12 +64,14 @@ export class FotocasaUrlGeneratorService {
     //console.log('generator propertyTypes', propertyTypes);
 
     url.searchParams.set('propertyTypeId', propertyTypes[0][0]);
-    if (propertyTypes.length > 1)
+    console.log('propertyTypes', JSON.stringify(propertyTypes));
+
+    if (propertyTypes[0].length > 1)
       url.searchParams.set('propertySubtypeIds', propertyTypes[0][1].join(';'));
 
     if (!md.geo) throw new Error('Geometry required.');
     console.log(md.geo);
-    
+
     const centerOfMass = turf.centerOfMass(md.geo);
     url.searchParams.set(
       'latitude',

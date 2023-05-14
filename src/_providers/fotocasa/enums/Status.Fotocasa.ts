@@ -12,8 +12,8 @@ export const conservationToCode: { [key: number]: number } = {
   1: Conservation.obra_nueva,
   2: Conservation.muy_bien,
   3: Conservation.bien,
-  4: Conservation.reformado,
-  8: Conservation.a_reformar,
+  8: Conservation.reformado,
+  4: Conservation.a_reformar,
 };
 
 export const codeToConservation: { [key: number]: number } = {
