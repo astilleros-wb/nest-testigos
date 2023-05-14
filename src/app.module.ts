@@ -23,6 +23,7 @@ import { AddScrappedWorker } from './add/add-scrapped.worker';
 import { UrlParserModule } from './url-parser/url-parser.module';
 import { UrlGeneratorModule } from './url-generator/url-generator.module';
 import { UrlScrapperModule } from './url-scrapper/url-scrapper.module';
+import { ImageCheckerModule } from './image-checker/image-checker.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { UrlScrapperModule } from './url-scrapper/url-scrapper.module';
     UrlParserModule,
     UrlGeneratorModule,
     UrlScrapperModule,
+    ImageCheckerModule,
   ],
   providers: [FotocasaUrlGeneratorService, AddScrappedWorker],
   exports: [BullModule],

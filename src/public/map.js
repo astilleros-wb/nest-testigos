@@ -41,6 +41,7 @@ export function initMap() {
 }
 
 const features = [];
+const markers = [];
 
 export const clearGeos = function () {
   for (let i = 0; i < features.length; i++) {
@@ -48,6 +49,12 @@ export const clearGeos = function () {
     P.setMap(null);
   }
   features.length = 0;
+
+  for (let i = 0; i < markers.length; i++) {
+    const M = markers[i];
+    M.setMap(null);
+  }
+  markers.length = 0;
 };
 
 export const setGeo = function (geo) {
@@ -102,14 +109,22 @@ export const getGeo = function () {
 export const setList = function (L) {
   setGeo(L.metadatum.geo);
   L.items.map((W) => {
-    const point = new google.maps.Marker({
+    const marker = new google.maps.Marker({
       position: {
         lat: W.property.geo.coordinates[1],
         lng: W.property.geo.coordinates[0],
       },
-      map,
-      title: `Testigo: ${W._id}`,
+      map: map,
     });
-    features.push(point);
+
+    const info = new google.maps.InfoWindow({
+      content: W.property.images
+        .map((i) => `<a href="${i}">img</a>`)
+        .join('<br>'),
+    });
+
+    marker.addListener('click', function () {
+      info.open(map, marker);
+    });
   });
 };

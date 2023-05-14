@@ -13,6 +13,7 @@ import { WitnessVersionService } from 'src/witness-version/witness-version.servi
 import { CreateWitnessDto } from './dto/create-witness.dto';
 import { UpdateWitnessDto } from './dto/update-witness.dto';
 import { Witness } from './entities/witness.entity';
+import { ImageCheckerService } from 'src/image-checker/image-checker.service';
 
 @Injectable()
 export class WitnessService {
@@ -21,6 +22,7 @@ export class WitnessService {
     private readonly witnessModel: Model<Witness>,
     private readonly witnessVersionService: WitnessVersionService,
     private readonly witnessAlertService: WitnessAlertService,
+    private readonly imageCheckerService: ImageCheckerService,
   ) {}
 
   async findByMetadata(M: MetadatumDto): Promise<Witness[]> {
@@ -109,7 +111,7 @@ export class WitnessService {
   async upsertWitnessFromNewAdd(add: Add): Promise<Witness> {
     console.log('upsertWitnessFromNewAdd');
 
-    const witness = await this.duplicatedByProperty(add.property);
+    const witness = await this.checkExist(add.property);
     //console.log(witness);
 
     if (witness) {
@@ -135,6 +137,13 @@ export class WitnessService {
     console.log('related witness - ', witness._id);
     await this.mergeAdd(witness, add);
     return await this.update(witness.toObject());
+  }
+
+  async checkExist(property: Property) {
+    const byPropertyInfo = await this.duplicatedByProperty(property);
+    if (byPropertyInfo) return byPropertyInfo;
+    const byPropertyImages = await this.duplicatedByImages(property);
+    if (byPropertyImages) return byPropertyImages;
   }
 
   async duplicatedByProperty(property: Property) {
@@ -163,6 +172,16 @@ export class WitnessService {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async duplicatedByImages(property: Property) {
+    const witness_id =
+      await this.imageCheckerService.findWitnessIdFromImageUrls(
+        property.images.slice(0, 5),
+      );
+    if (!witness_id) return null;
+    const witness = await this.witnessModel.findById(witness_id);
+    return witness;
   }
 
   async mergeAdd(witness: Witness, add: Add) {
