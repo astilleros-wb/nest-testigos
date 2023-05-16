@@ -38,8 +38,11 @@ export class FotocasaUrlScrapperService implements UrlScrapper {
       const Raws: fotocasaAdd[] = plainToInstance(fotocasaAdd, fotocasaAdds);
       console.log('TOTAL ANUNCIOS plainToInstance: ', Raws.length);
       const Adds = Raws.map((R) => this.toAdd(R)).filter((a: any) => !!a);
-      Adds.forEach((add) =>
-        this.addService.add(add.provider + add.provider_id, add),
+      Adds.forEach((add, index) =>
+        this.addService.add(
+          '' + index + '' + add.provider + add.provider_id,
+          add,
+        ),
       );
       pageNumber++;
     } while (progress < pageCount);

@@ -92,7 +92,7 @@ export class WitnessService {
   }
 
   async update(W: UpdateWitnessDto): Promise<Witness> {
-    const set_data = W;
+    const set_data = { ...W };
     set_data.version = set_data.version + 1;
     const updated = await this.witnessModel.findOneAndUpdate(
       {
@@ -142,8 +142,9 @@ export class WitnessService {
   async checkExist(property: Property) {
     const byPropertyInfo = await this.duplicatedByProperty(property);
     if (byPropertyInfo) return byPropertyInfo;
-    const byPropertyImages = await this.duplicatedByImages(property);
-    if (byPropertyImages) return byPropertyImages;
+    //CHECK IMAGES
+    /*     const byPropertyImages = await this.duplicatedByImages(property);
+    if (byPropertyImages) return byPropertyImages; */
   }
 
   async duplicatedByProperty(property: Property) {
@@ -152,22 +153,27 @@ export class WitnessService {
         'property.geo': {
           $near: {
             $geometry: centerOfMass(property.geo).geometry,
-            $maxDistance: 300,
+            $maxDistance: 1000,
           },
         },
       };
-      property.type ? (q['property.type'] = property.type) : undefined;
+      //property.type ? (q['property.type'] = property.type) : undefined;
       property.price ? (q['property.price'] = property.price) : undefined;
-      property.surface ? (q['property.surface'] = property.surface) : undefined;
+      property.surface
+        ? (q['property.surface'] = {
+            $gt: property.surface - 0.05 * property.surface,
+            $lt: property.surface + 0.05 * property.surface,
+          })
+        : undefined;
       property.bedrooms
         ? (q['property.bedrooms'] = property.bedrooms)
         : undefined;
       property.bathrooms
         ? (q['property.bathrooms'] = property.bathrooms)
         : undefined;
-      console.log('duplicatedByProperty query ', q);
 
       const info_duplicated = await this.witnessModel.findOne(q);
+      console.log('duplicatedByProperty query ', q, info_duplicated?._id);
       return info_duplicated;
     } catch (error) {
       console.log(error);
@@ -177,7 +183,7 @@ export class WitnessService {
   async duplicatedByImages(property: Property) {
     const witness_id =
       await this.imageCheckerService.findWitnessIdFromImageUrls(
-        property.images.slice(0, 5),
+        property.images.slice(0, 3),
       );
     if (!witness_id) return null;
     const witness = await this.witnessModel.findById(witness_id);
@@ -188,6 +194,8 @@ export class WitnessService {
     const alerts: WitnessAlert[] = [];
 
     if (!witness.adds.some((add_id) => add_id === add._id)) {
+      console.log('añadimos nuevo add al witness', witness._id);
+
       witness.adds.push(add._id);
       const alert = await this.witnessAlertService.create({
         type: AlertType.newAdd,

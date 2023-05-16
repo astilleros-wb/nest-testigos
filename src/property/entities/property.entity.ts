@@ -39,3 +39,5 @@ export class Property {
 }
 
 export const PropertySchema = SchemaFactory.createForClass(Property);
+
+PropertySchema.index({ geo: '2dsphere' });

@@ -17,7 +17,6 @@ export class ImageCheckerService {
       const existingUrl = await this.imageModel.findOne({
         url,
       });
-      console.log(!!existingUrl);
 
       if (existingUrl) {
         console.log('imagen duplicada por url');
@@ -29,7 +28,6 @@ export class ImageCheckerService {
       const existingFingerprint = await this.imageModel.findOne({
         fingerprint,
       });
-      console.log(!!existingFingerprint);
 
       if (existingFingerprint) {
         console.log('imagen duplicada por huella digital');
@@ -50,24 +48,18 @@ export class ImageCheckerService {
   async generateImageFingerprint(url: string): Promise<string> {
     console.log('generateImageFingerprint', url);
     // Descargar la imagen desde la URL
-    const response = await fetch(url);
-    console.log(1, response.status);
-
+    //https://static.inmofactory.com/images/inmofactory/documents/1/119147/32412378/526817458.jpg?rule=web_324x160
+    const response = await fetch(
+      url.replace(/rule=original/g, 'rule=web_324x160'),
+    );
     const buffer = await response.arrayBuffer();
-
-    console.log(2, buffer.byteLength);
     // Redimensionar la imagen a un tamaño fijo para normalizar las huellas digitales
-    const resizedImageBuffer = await sharp(buffer).resize(256, 256).toBuffer();
-
-    console.log(3, resizedImageBuffer.byteLength);
+    const resizedImageBuffer = await sharp(buffer) /* .resize(256, 256) */
+      .toBuffer();
     // Calcular el hash MD5 de la imagen redimensionada para generar la huella digital
     const hash = crypto.createHash('md5');
-    console.log(4);
     hash.update(resizedImageBuffer);
-    console.log(5);
     const fingerprint = hash.digest('hex');
-    console.log(6, fingerprint.length);
-
     return fingerprint;
   }
 }

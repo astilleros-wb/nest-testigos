@@ -100,8 +100,7 @@ export class FotocasaUrlGeneratorService {
     url.searchParams.set('combinedLocationIds', combinedLocationIds);
 
     // DEFAULTS
-    url.searchParams.set('pageNumber', '1'); // TO DO
-    url.searchParams.set('onlyCount', 'true');
+    url.searchParams.set('pageNumber', '1');
     url.searchParams.set('size', '300');
     url.searchParams.set('platformId', '1');
     url.searchParams.set('sortOrderDesc', 'true');

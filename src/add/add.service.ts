@@ -25,7 +25,7 @@ export class AddService {
       provider: add.provider,
       provider_id: add.provider_id,
     });
-    //console.log('exist ', exist?._id);
+    console.log('exist ', exist?._id);
     if (!exist) return await this.newAdd(add);
     return await this.updateAdd(exist, add);
   }
@@ -75,7 +75,7 @@ export class AddService {
     };
   }
 
-  add(name: string, add: any) {
-    this.addScrappedQueue.add(name, add);
+  async add(name: string, add: any) {
+    await this.addScrappedQueue.add(name, add);
   }
 }

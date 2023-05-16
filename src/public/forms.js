@@ -41,6 +41,8 @@ const V = {
   },
 
   btn_generate_list: document.getElementById('btn_generate_list'),
+
+  list_last_lists: document.getElementById('list_last_lists'),
 };
 
 const loadEmiters = function () {
@@ -216,11 +218,29 @@ const generateMetadata = () => {
   };
 };
 
-const addList = (L) => {
+const addList = (L, fromLastList = false) => {
   console.log(L);
   console.log('LISTA ', L);
+  geo = L.metadatum.geo;
   clearGeos();
   setList(L);
+  if (!fromLastList) addToLastSearchs(L);
+};
+
+const addToLastSearchs = (L) => {
+  const newLi = document.createElement('li');
+  newLi.listInfo = L;
+  newLi.addEventListener(
+    'click',
+    function (event) {
+      event.preventDefault();
+      console.log(event.target.listInfo);
+      addList(L, true);
+    },
+    false,
+  );
+  newLi.innerHTML = new Date().toISOString();
+  V.list_last_lists.appendChild(newLi);
 };
 
 loadEmiters();
